@@ -5,28 +5,18 @@ import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.io.PrintWriter;
 import java.io.FileNotFoundException;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class Main {
 
-    public static void saveAssignments(ArrayList<Assignment> assignments) {
-        try (PrintWriter writer = new PrintWriter("assignments.csv")) {
-            for (Assignment a : assignments) {
-                writer.println(
-                    a.getCourse() + "," +
-                    a.getTitle() + "," +
-                    a.getDueDate() + "," +
-                    a.isCompleted()
-                );
-            }
-
-            System.out.println("Assignments saved successfully!");
-        } catch (FileNotFoundException e) {
-            System.out.println("Error saving assignments.");
-        }
-    }
+    
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         ArrayList<Assignment> assignments = new ArrayList<>();
+        
+        loadAssignments(assignments);
         int choice = 0;
 
         while (choice != 4) {
@@ -142,5 +132,65 @@ public class Main {
 
         scanner.close();
     }
+
+    public static void saveAssignments(ArrayList<Assignment> assignments) {
+        try (PrintWriter writer = new PrintWriter("assignments.csv")) {
+            for (Assignment a : assignments) {
+                writer.println(
+                    a.getCourse() + "," +
+                    a.getTitle() + "," +
+                    a.getDueDate() + "," +
+                    a.isCompleted()
+                );
+            }
+
+            System.out.println("Assignments saved successfully!");
+        } catch (FileNotFoundException e) {
+            System.out.println("Error saving assignments.");
+        }
+    }
+
+
+    public static void loadAssignments(ArrayList<Assignment> assignments) {
+        try (BufferedReader reader = new BufferedReader(
+                new FileReader("assignments.csv"))) {
+
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",", -1);
+
+                if (parts.length != 4) {
+                    continue;
+                }
+
+                try {
+                    String course = parts[0];
+                    String title = parts[1];
+                    LocalDate dueDate = LocalDate.parse(parts[2]);
+                    boolean completed = Boolean.parseBoolean(parts[3]);
+
+                    Assignment assignment =
+                            new Assignment(course, title, dueDate);
+
+                    if (completed) {
+                        assignment.markCompleted();
+                    }
+
+                    assignments.add(assignment);
+                } catch (DateTimeParseException e) {
+                    System.out.println("Skipping assignment with invalid date.");
+                }
+            }
+
+            System.out.println("Saved assignments loaded successfully!");
+
+        } catch (java.io.FileNotFoundException e) {
+            System.out.println("No saved assignments found. Starting fresh.");
+        } catch (IOException e) {
+            System.out.println("Error loading assignments.");
+        }
+    }
+
 }
 
