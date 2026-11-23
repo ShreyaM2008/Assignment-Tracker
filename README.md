@@ -1,54 +1,79 @@
+
 # Assignment Tracker
 
-## Project Goal
+## Project Overview
+Assignment Tracker is a Java command-line application that helps college students organize assignments and keep track of deadlines.
 
-The goal of this project is to create a simple Java program that helps college students keep track of their assignments and deadlines across multiple classes. The program will allow users to organize their coursework and monitor which assignments they have completed.
+Students often have assignments across multiple courses, making it difficult to remember due dates and track completed work. This application provides a simple way to manage everything in one place.
 
-## MVP Features
+## Features
+- Add assignments with a course name, title, and due date
+- View all assignments and their completion status
+- Mark assignments as completed
+- Save assignments to a CSV file
+- Load previously saved assignments when restarting
+- Sort assignments by due date
 
-The first version of the Assignment Tracker will include:
+## Technologies Used
+- Java
+- ArrayList
+- LocalDate
+- BufferedReader and PrintWriter
+- CSV file storage
+- Git and GitHub
+- Visual Studio Code
 
-- **Add Assignments:** Users can enter an assignment title, course name, and due date.
-- **View Assignments:** Users can view all their assignments and completion statuses.
-- **Mark Assignments as Completed:** Users can update assignments when they finish them.
-- **Save and Load Assignments:** Assignment information will be stored in a CSV file so it is available when the program is reopened.
+## How to Run
 
-## Future Plans
+1. Clone the repository:
+   git clone https://github.com/ShreyaM2008/Assignment-Tracker.git
 
-After completing the MVP, I plan to add the following features:
+2. Open the Assignment-Tracker folder in a terminal.
 
-- Automatically sort assignments by due date.
-- Display reminders for upcoming deadlines.
-- Allow users to assign priority levels (high, medium, or low) to assignments.
+3. Compile the Java files:
+   javac src/Main.java src/Assignment.java
 
-## Tech Stack
+4. Run the application:
+   java -cp src Main
 
-- **Programming Language:** Java
-- **Libraries:** ArrayList, LocalDate, BufferedReader, PrintWriter, and Scanner
-- **Data Storage:** CSV file
-- **User Interface:** Command-line menu
-- **Development Tools:** IntelliJ IDEA or VS Code, Git, and GitHub
-- **External APIs:** None
+## Example Usage
 
-## Project Structure
+=== Assignment Tracker ===
+1. Add Assignment
+2. View Assignments
+3. Complete Assignment
+4. Sort Assignments by Due Date
+5. Exit
 
-- `src/` - Java source code
-- `tests/` - Files used for testing the program
-- `docs/` - Eisenhower Matrix and system diagram
-- `README.md` - Project description and documentation
+Enter your choice: 1
+Enter course name: CS 18000
+Enter assignment title: Homework 10
+Enter due date (YYYY-MM-DD): 2026-12-01
+Assignment added successfully!
 
-## Development Plan
+## Development Process
+
+The project was developed in stages:
 
 1. Set up the GitHub repository and Java project.
-2. Create the Assignment class.
-3. Build the main menu.
-4. Implement adding assignments.
-5. Implement viewing assignments.
-6. Implement marking assignments as completed.
-7. Save assignments to a CSV file.
-8. Load assignments from a CSV file.
-9. Test the program and fix errors.
+2. Created the Assignment class.
+3. Built the interactive menu.
+4. Implemented adding assignments.
+5. Implemented viewing assignments.
+6. Added assignment completion tracking.
+7. Implemented CSV saving and loading.
+8. Tested the program and improved error handling.
+9. Added sorting by due date using a separate Git branch.
 
-## Project Status
+## Future Improvements
+- Add assignment priority levels
+- Display reminders for upcoming deadlines
+- Allow users to edit or delete assignments
+- Create a graphical user interface
 
-Currently in the planning and setup stage. Implementation will begin after the initial project design is completed.
+## Project Documentation
+The docs folder contains the project planning materials, including the Eisenhower Matrix and system flowchart.
+
+## Video Walkthrough
+Video link: To be added
+
