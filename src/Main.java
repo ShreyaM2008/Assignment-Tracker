@@ -74,7 +74,43 @@ public class Main {
                     }
                     break;
                 case 3:
-                    System.out.println("Complete Assignment selected.");
+                    if (assignments.isEmpty()) {
+                        System.out.println("No assignments to complete.");
+                        break;
+                    }
+
+                    System.out.println("\n=== Select an Assignment ===");
+
+                    for (int i = 0; i < assignments.size(); i++) {
+                        Assignment a = assignments.get(i);
+
+                        System.out.println((i + 1) + ". " + a.getTitle()
+                                + " (" + a.getCourse() + ") - "
+                                + (a.isCompleted() ? "Completed" : "Incomplete"));
+                    }
+
+                    System.out.print("Enter assignment number: ");
+                    String numberInput = scanner.nextLine();
+
+                    try {
+                        int assignmentNumber = Integer.parseInt(numberInput);
+
+                        if (assignmentNumber < 1 ||
+                                assignmentNumber > assignments.size()) {
+                            System.out.println("Invalid assignment number.");
+                        } else {
+                            Assignment selected = assignments.get(assignmentNumber - 1);
+
+                            if (selected.isCompleted()) {
+                                System.out.println("Assignment is already completed.");
+                            } else {
+                                selected.markCompleted();
+                                System.out.println("Assignment marked as completed!");
+                            }
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Please enter a valid number.");
+                    }
                     break;
                 case 4:
                     System.out.println("Goodbye!");
