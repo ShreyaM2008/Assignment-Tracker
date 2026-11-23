@@ -3,8 +3,27 @@ import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
+import java.io.PrintWriter;
+import java.io.FileNotFoundException;
 
 public class Main {
+
+    public static void saveAssignments(ArrayList<Assignment> assignments) {
+        try (PrintWriter writer = new PrintWriter("assignments.csv")) {
+            for (Assignment a : assignments) {
+                writer.println(
+                    a.getCourse() + "," +
+                    a.getTitle() + "," +
+                    a.getDueDate() + "," +
+                    a.isCompleted()
+                );
+            }
+
+            System.out.println("Assignments saved successfully!");
+        } catch (FileNotFoundException e) {
+            System.out.println("Error saving assignments.");
+        }
+    }
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         ArrayList<Assignment> assignments = new ArrayList<>();
@@ -113,6 +132,7 @@ public class Main {
                     }
                     break;
                 case 4:
+                    saveAssignments(assignments);
                     System.out.println("Goodbye!");
                     break;
                 default:
