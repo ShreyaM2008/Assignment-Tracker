@@ -1,9 +1,13 @@
 
+import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        ArrayList<Assignment> assignments = new ArrayList<>();
         int choice = 0;
 
         while (choice != 4) {
@@ -24,8 +28,32 @@ public class Main {
             }
 
             switch (choice) {
+                
                 case 1:
-                    System.out.println("Add Assignment selected.");
+                    System.out.print("Enter course name: ");
+                    String course = scanner.nextLine().trim();
+
+                    System.out.print("Enter assignment title: ");
+                    String title = scanner.nextLine().trim();
+
+                    System.out.print("Enter due date (YYYY-MM-DD): ");
+                    String dateInput = scanner.nextLine().trim();
+
+                    if (course.isEmpty() || title.isEmpty()) {
+                        System.out.println("Course and title cannot be empty.");
+                        break;
+                    }
+
+                    try {
+                        LocalDate dueDate = LocalDate.parse(dateInput);
+
+                        Assignment assignment = new Assignment(course, title, dueDate);
+                        assignments.add(assignment);
+
+                        System.out.println("Assignment added successfully!");
+                    } catch (DateTimeParseException e) {
+                        System.out.println("Invalid date. Use YYYY-MM-DD.");
+                    }
                     break;
                 case 2:
                     System.out.println("View Assignments selected.");
