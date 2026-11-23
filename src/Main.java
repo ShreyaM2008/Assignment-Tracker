@@ -56,7 +56,22 @@ public class Main {
                     }
                     break;
                 case 2:
-                    System.out.println("View Assignments selected.");
+                    if (assignments.isEmpty()) {
+                        System.out.println("No assignments found.");
+                    } else {
+                        System.out.println("\n=== Your Assignments ===");
+
+                        for (int i = 0; i < assignments.size(); i++) {
+                            Assignment a = assignments.get(i);
+
+                            System.out.println("\nAssignment " + (i + 1));
+                            System.out.println("Course: " + a.getCourse());
+                            System.out.println("Title: " + a.getTitle());
+                            System.out.println("Due Date: " + a.getDueDate());
+                            System.out.println("Status: " +
+                                (a.isCompleted() ? "Completed" : "Incomplete"));
+                        }
+                    }
                     break;
                 case 3:
                     System.out.println("Complete Assignment selected.");
