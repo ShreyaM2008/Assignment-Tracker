@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.io.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.table.DefaultTableCellRenderer;
 
 public class AssignmentTrackerGUI extends JFrame {
 
@@ -30,7 +31,8 @@ public class AssignmentTrackerGUI extends JFrame {
 
     public AssignmentTrackerGUI() {
         setTitle("Assignment Tracker");
-        setSize(850, 550);
+        setSize(900, 650);
+        setMinimumSize(new Dimension(750, 500));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         addWindowListener(new WindowAdapter() {
@@ -39,7 +41,7 @@ public class AssignmentTrackerGUI extends JFrame {
                 saveAndExit();
             }
         });
-        
+
         setLocationRelativeTo(null);
         setLayout(new BorderLayout(10, 10));
 
@@ -57,6 +59,7 @@ public class AssignmentTrackerGUI extends JFrame {
 
         // Main content panel
         JPanel contentPanel = new JPanel(new BorderLayout(10, 10));
+        contentPanel.setBackground(new Color(243, 245, 249));
         contentPanel.setBorder(BorderFactory.createEmptyBorder(
                 10, 15, 10, 15));
 
@@ -66,6 +69,10 @@ public class AssignmentTrackerGUI extends JFrame {
         totalLabel = new JLabel("Total: 0", SwingConstants.CENTER);
         incompleteLabel = new JLabel("Incomplete: 0", SwingConstants.CENTER);
         completedLabel = new JLabel("Completed: 0", SwingConstants.CENTER);
+
+        styleCounter(totalLabel, new Color(37, 62, 99));
+        styleCounter(incompleteLabel, new Color(190, 120, 30));
+        styleCounter(completedLabel, new Color(35, 130, 75));
 
         statsPanel.add(totalLabel);
         statsPanel.add(incompleteLabel);
@@ -119,11 +126,54 @@ public class AssignmentTrackerGUI extends JFrame {
 
         assignmentTable = new JTable(tableModel);
         assignmentTable.setRowHeight(30);
+
+
+        assignmentTable.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        assignmentTable.getTableHeader().setFont(
+                new Font("SansSerif", Font.BOLD, 14));
+
+        assignmentTable.getTableHeader().setBackground(
+                new Color(225, 232, 242));
+
+        assignmentTable.setSelectionBackground(
+                new Color(210, 225, 245));
+
+        assignmentTable.setSelectionForeground(Color.BLACK);
+        assignmentTable.setGridColor(new Color(225, 225, 225));
+
+        assignmentTable.getColumnModel().getColumn(0).setPreferredWidth(120);
+        assignmentTable.getColumnModel().getColumn(1).setPreferredWidth(280);
+        assignmentTable.getColumnModel().getColumn(2).setPreferredWidth(130);
+        assignmentTable.getColumnModel().getColumn(3).setPreferredWidth(120);
+
         assignmentTable.setSelectionMode(
                 ListSelectionModel.SINGLE_SELECTION);
 
         assignmentTable.getTableHeader().setReorderingAllowed(false);
         assignmentTable.setFillsViewportHeight(true);
+
+        assignmentTable.getColumnModel().getColumn(3)
+                .setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(
+                    JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
+
+                super.getTableCellRendererComponent(
+                        table, value, isSelected, hasFocus, row, column);
+
+                setHorizontalAlignment(SwingConstants.CENTER);
+                setFont(new Font("SansSerif", Font.BOLD, 13));
+
+                if ("Completed".equals(value)) {
+                    setForeground(new Color(35, 130, 75));
+                } else {
+                    setForeground(new Color(190, 120, 30));
+                }
+
+                return this;
+            }
+        });
 
         JScrollPane scrollPane = new JScrollPane(assignmentTable);
 
@@ -146,6 +196,11 @@ public class AssignmentTrackerGUI extends JFrame {
 
         add(contentPanel, BorderLayout.CENTER);
         
+        styleButton(addButton, new Color(37, 62, 99));
+        styleButton(completeButton, new Color(35, 130, 75));
+        styleButton(sortButton, new Color(65, 105, 160));
+        styleButton(saveButton, new Color(95, 100, 115));
+
         addButton.addActionListener(e -> addAssignment());
         completeButton.addActionListener(e -> completeAssignment());
         sortButton.addActionListener(e -> sortAssignments());
@@ -161,7 +216,6 @@ public class AssignmentTrackerGUI extends JFrame {
             new AssignmentTrackerGUI();
         });
     }
-
 
     
     private void refreshTable() {
@@ -354,6 +408,34 @@ public class AssignmentTrackerGUI extends JFrame {
                     "Assignments saved successfully!");
             dispose();
         }
+    }
+
+    
+    private void styleCounter(JLabel label, Color color) {
+        label.setFont(new Font("SansSerif", Font.BOLD, 18));
+        label.setForeground(color);
+        label.setBackground(Color.WHITE);
+        label.setOpaque(true);
+
+        label.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(210, 215, 225)),
+                BorderFactory.createEmptyBorder(15, 10, 15, 10)
+        ));
+    }
+
+    private void styleButton(JButton button, Color color) {
+        button.setFont(new Font("SansSerif", Font.BOLD, 13));
+        button.setBackground(color);
+        button.setForeground(Color.WHITE);
+        button.setOpaque(true);
+        button.setContentAreaFilled(true);
+        button.setBorderPainted(false);
+        button.setFocusPainted(false);
+
+        button.setBorder(BorderFactory.createEmptyBorder(
+                10, 18, 10, 18));
+
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
 
