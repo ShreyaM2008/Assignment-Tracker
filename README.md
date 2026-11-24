@@ -2,22 +2,35 @@
 # Assignment Tracker
 
 ## Project Overview
-Assignment Tracker is a Java command-line application that helps college students organize assignments and keep track of deadlines.
 
-Students often have assignments across multiple courses, making it difficult to remember due dates and track completed work. This application provides a simple way to manage everything in one place.
+Assignment Tracker is a Java desktop application designed to help college students organize assignments, manage deadlines, and track their progress.
+
+Students often have assignments across multiple courses, making it difficult to keep track of everything. This application provides a simple graphical interface where students can manage their coursework in one place.
 
 ## Features
-- Add assignments with a course name, title, and due date
-- View all assignments and their completion status
-- Mark assignments as completed
-- Save assignments to a CSV file
-- Load previously saved assignments when restarting
-- Sort assignments by due date
+
+### MVP Features
+- [x] Add assignments with course names, titles, and due dates
+- [x] View all assignments
+- [x] Mark assignments as completed
+- [x] Save assignments to a CSV file
+- [x] Load saved assignments automatically
+
+### Additional Features
+- [x] Sort assignments by due date
+- [x] Java Swing graphical user interface
+- [x] Interactive assignment table
+- [x] Automatic assignment counters
+- [x] Color-coded completion statuses
+- [x] Input validation and error handling
 
 ## Technologies Used
+
 - Java
+- Java Swing
 - ArrayList
 - LocalDate
+- Comparator
 - BufferedReader and PrintWriter
 - CSV file storage
 - Git and GitHub
@@ -25,55 +38,69 @@ Students often have assignments across multiple courses, making it difficult to 
 
 ## How to Run
 
-1. Clone the repository:
-   git clone https://github.com/ShreyaM2008/Assignment-Tracker.git
+Make sure Java is installed on your computer.
 
-2. Open the Assignment-Tracker folder in a terminal.
+### Clone the repository
 
-3. Compile the Java files:
-   javac src/Main.java src/Assignment.java
+    git clone https://github.com/ShreyaM2008/Assignment-Tracker.git
+    cd Assignment-Tracker
 
-4. Run the application:
-   java -cp src Main
+### Compile the application
 
-## Example Usage
+    javac src/*.java
 
-=== Assignment Tracker ===
-1. Add Assignment
-2. View Assignments
-3. Complete Assignment
-4. Sort Assignments by Due Date
-5. Exit
+### Run the GUI version
 
-Enter your choice: 1
-Enter course name: CS 18000
-Enter assignment title: Homework 10
-Enter due date (YYYY-MM-DD): 2026-12-01
-Assignment added successfully!
+    java -cp src AssignmentTrackerGUI
+
+### Run the original command-line version
+
+    java -cp src Main
+
+## How to Use
+
+1. Enter the course name, assignment title, and due date.
+2. Click Add Assignment.
+3. View assignments in the table.
+4. Select an assignment and click Mark Completed.
+5. Click Sort by Due Date to organize deadlines.
+6. Click Save & Exit to save your assignments.
+
+Previously saved assignments are automatically loaded when the application opens.
+
+## Application Screenshot
+
+![Assignment Tracker GUI](docs/gui-screenshot.png)
+
+## Project Structure
+
+- src/Assignment.java - Assignment object and its properties
+- src/Main.java - Original command-line application
+- src/AssignmentTrackerGUI.java - Graphical user interface
+- docs/ - Project planning materials and documentation
+- tests/ - Testing directory
+- assignments.csv - Automatically generated local data file
 
 ## Development Process
 
-The project was developed in stages:
+The project was initially developed as a command-line application. Each core feature was implemented, tested, and committed separately.
 
-1. Set up the GitHub repository and Java project.
-2. Created the Assignment class.
-3. Built the interactive menu.
-4. Implemented adding assignments.
-5. Implemented viewing assignments.
-6. Added assignment completion tracking.
-7. Implemented CSV saving and loading.
-8. Tested the program and improved error handling.
-9. Added sorting by due date using a separate Git branch.
+Sorting by due date was added as a Schedule feature. The graphical user interface was then developed on a separate feature branch and merged into the main branch after testing.
 
 ## Future Improvements
-- Add assignment priority levels
-- Display reminders for upcoming deadlines
-- Allow users to edit or delete assignments
-- Create a graphical user interface
+
+- [ ] Add assignment priority levels
+- [ ] Display upcoming deadline reminders
+- [ ] Allow users to edit or delete assignments
+- [ ] Add filtering by course
+- [ ] Add a calendar view
 
 ## Project Documentation
-The docs folder contains the project planning materials, including the Eisenhower Matrix and system flowchart.
+
+The project planning materials include an Eisenhower Matrix and a system flowchart.
 
 ## Video Walkthrough
+
 Video link: To be added
+
 
