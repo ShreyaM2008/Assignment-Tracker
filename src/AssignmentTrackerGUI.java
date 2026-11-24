@@ -2,6 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.Comparator;
 
 public class AssignmentTrackerGUI extends JFrame {
 
@@ -131,6 +134,10 @@ public class AssignmentTrackerGUI extends JFrame {
         contentPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         add(contentPanel, BorderLayout.CENTER);
+        
+        addButton.addActionListener(e -> addAssignment());
+        completeButton.addActionListener(e -> completeAssignment());
+        sortButton.addActionListener(e -> sortAssignments());
 
         setVisible(true);
     }
@@ -154,6 +161,95 @@ public class AssignmentTrackerGUI extends JFrame {
             });
         }
     }
+
+
+    private void addAssignment() {
+        String course = courseField.getText().trim();
+        String title = titleField.getText().trim();
+        String dateInput = dateField.getText().trim();
+
+        if (course.isEmpty() || title.isEmpty() || dateInput.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "Please fill in all fields.");
+            return;
+        }
+
+        if (course.contains(",") || title.contains(",")) {
+            JOptionPane.showMessageDialog(this,
+                    "Course and title cannot contain commas.");
+            return;
+        }
+
+        try {
+            LocalDate dueDate = LocalDate.parse(dateInput);
+
+            Assignment assignment =
+                    new Assignment(course, title, dueDate);
+
+            assignments.add(assignment);
+
+            refreshTable();
+
+            courseField.setText("");
+            titleField.setText("");
+            dateField.setText("");
+
+            JOptionPane.showMessageDialog(this,
+                    "Assignment added successfully!");
+
+        } catch (DateTimeParseException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Invalid date. Please use YYYY-MM-DD.");
+        }
+    }
+
+
+
+    private void completeAssignment() {
+        int selectedRow = assignmentTable.getSelectedRow();
+
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this,
+                    "Please select an assignment first.");
+            return;
+        }
+
+        Assignment selected = assignments.get(selectedRow);
+
+        if (selected.isCompleted()) {
+            JOptionPane.showMessageDialog(this,
+                    "Assignment is already completed.");
+            return;
+        }
+
+        selected.markCompleted();
+
+        refreshTable();
+
+        JOptionPane.showMessageDialog(this,
+                "Assignment marked as completed!");
+    }
+
+
+    private void sortAssignments() {
+        if (assignments.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "No assignments to sort.");
+            return;
+        }
+
+        assignments.sort(
+                Comparator.comparing(Assignment::getDueDate));
+
+        refreshTable();
+
+        JOptionPane.showMessageDialog(this,
+                "Assignments sorted by due date!");
+    }
+
+
+
+
 
 }
 
