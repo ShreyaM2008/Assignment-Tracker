@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Comparator;
+import java.io.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class AssignmentTrackerGUI extends JFrame {
 
@@ -29,6 +32,14 @@ public class AssignmentTrackerGUI extends JFrame {
         setTitle("Assignment Tracker");
         setSize(850, 550);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                saveAndExit();
+            }
+        });
+        
         setLocationRelativeTo(null);
         setLayout(new BorderLayout(10, 10));
 
@@ -139,6 +150,9 @@ public class AssignmentTrackerGUI extends JFrame {
         completeButton.addActionListener(e -> completeAssignment());
         sortButton.addActionListener(e -> sortAssignments());
 
+        loadAssignments();
+        refreshTable();
+
         setVisible(true);
     }
 
@@ -149,8 +163,11 @@ public class AssignmentTrackerGUI extends JFrame {
     }
 
 
+    
     private void refreshTable() {
         tableModel.setRowCount(0);
+
+        int completedCount = 0;
 
         for (Assignment a : assignments) {
             tableModel.addRow(new Object[]{
@@ -159,8 +176,20 @@ public class AssignmentTrackerGUI extends JFrame {
                 a.getDueDate(),
                 a.isCompleted() ? "Completed" : "Incomplete"
             });
+
+            if (a.isCompleted()) {
+                completedCount++;
+            }
         }
+
+        totalLabel.setText("Total: " + assignments.size());
+
+        incompleteLabel.setText("Incomplete: " +
+                (assignments.size() - completedCount));
+
+        completedLabel.setText("Completed: " + completedCount);
     }
+
 
 
     private void addAssignment() {
@@ -246,6 +275,88 @@ public class AssignmentTrackerGUI extends JFrame {
         JOptionPane.showMessageDialog(this,
                 "Assignments sorted by due date!");
     }
+
+
+    private boolean saveAssignments() {
+        try (PrintWriter writer = new PrintWriter("assignments.csv")) {
+            for (Assignment a : assignments) {
+                writer.println(
+                        a.getCourse() + "," +
+                        a.getTitle() + "," +
+                        a.getDueDate() + "," +
+                        a.isCompleted()
+                );
+            }
+
+            if (writer.checkError()) {
+                throw new IOException("Unable to write assignments.");
+            }
+
+            return true;
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error saving assignments.");
+            return false;
+        }
+    }
+
+
+    private void loadAssignments() {
+        try (BufferedReader reader = new BufferedReader(
+                new FileReader("assignments.csv"))) {
+
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",", -1);
+
+                if (parts.length != 4) {
+                    continue;
+                }
+
+                try {
+                    String course = parts[0];
+                    String title = parts[1];
+                    LocalDate dueDate = LocalDate.parse(parts[2]);
+                    String status = parts[3].trim();
+
+                    if (!status.equalsIgnoreCase("true") &&
+                            !status.equalsIgnoreCase("false")) {
+                        continue;
+                    }
+
+                    Assignment assignment =
+                            new Assignment(course, title, dueDate);
+
+                    if (Boolean.parseBoolean(status)) {
+                        assignment.markCompleted();
+                    }
+
+                    assignments.add(assignment);
+
+                } catch (DateTimeParseException e) {
+                    // Skip assignments with invalid dates
+                }
+            }
+
+        } catch (FileNotFoundException e) {
+            // Start with an empty list if no saved file exists
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error loading assignments.");
+        }
+    }
+
+    private void saveAndExit() {
+        if (saveAssignments()) {
+            JOptionPane.showMessageDialog(this,
+                    "Assignments saved successfully!");
+            dispose();
+        }
+    }
+
+
 
 
 
