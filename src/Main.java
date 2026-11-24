@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Comparator;
 
 public class Main {
 
@@ -15,16 +16,17 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         ArrayList<Assignment> assignments = new ArrayList<>();
-        
+
         loadAssignments(assignments);
         int choice = 0;
 
-        while (choice != 4) {
+        while (choice != 5) {
             System.out.println("\n=== Assignment Tracker ===");
             System.out.println("1. Add Assignment");
             System.out.println("2. View Assignments");
             System.out.println("3. Complete Assignment");
-            System.out.println("4. Exit");
+            System.out.println("4. Sort Assignments by Due Date");
+            System.out.println("5. Exit");
             System.out.print("Enter your choice: ");
 
             String input = scanner.nextLine();
@@ -121,7 +123,27 @@ public class Main {
                         System.out.println("Please enter a valid number.");
                     }
                     break;
+                
                 case 4:
+                    if (assignments.isEmpty()) {
+                        System.out.println("No assignments to sort.");
+                    } else {
+                        assignments.sort(
+                            Comparator.comparing(Assignment::getDueDate)
+                        );
+
+                        System.out.println("Assignments sorted by due date!");
+
+                        for (Assignment a : assignments) {
+                            System.out.println(
+                                a.getDueDate() + " - " +
+                                a.getCourse() + ": " +
+                                a.getTitle()
+                            );
+                        }
+                    }
+                    break;
+                case 5:
                     saveAssignments(assignments);
                     System.out.println("Goodbye!");
                     break;
@@ -161,6 +183,7 @@ public class Main {
                 String[] parts = line.split(",", -1);
 
                 if (parts.length != 4) {
+                    System.out.println("Skipping invalid CSV row.");
                     continue;
                 }
 
@@ -168,7 +191,15 @@ public class Main {
                     String course = parts[0];
                     String title = parts[1];
                     LocalDate dueDate = LocalDate.parse(parts[2]);
-                    boolean completed = Boolean.parseBoolean(parts[3]);
+                    String status = parts[3].trim();
+
+                    if (!status.equalsIgnoreCase("true") &&
+                            !status.equalsIgnoreCase("false")) {
+                        System.out.println("Skipping assignment with invalid status.");
+                        continue;
+                    }
+
+                    boolean completed = Boolean.parseBoolean(status);
 
                     Assignment assignment =
                             new Assignment(course, title, dueDate);
