@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import javax.swing.table.DefaultTableModel;
+import java.util.ArrayList;
 
 public class AssignmentTrackerGUI extends JFrame {
 
@@ -15,6 +17,10 @@ public class AssignmentTrackerGUI extends JFrame {
     private JLabel totalLabel;
     private JLabel incompleteLabel;
     private JLabel completedLabel;
+
+    private JTable assignmentTable;
+    private DefaultTableModel tableModel;
+    private ArrayList<Assignment> assignments = new ArrayList<>();
 
     public AssignmentTrackerGUI() {
         setTitle("Assignment Tracker");
@@ -80,16 +86,36 @@ public class AssignmentTrackerGUI extends JFrame {
 
         contentPanel.add(topPanel, BorderLayout.NORTH);
 
-        // Placeholder for assignment table
+        
+        // Assignment table
         JPanel tablePanel = new JPanel(new BorderLayout());
         tablePanel.setBorder(BorderFactory.createTitledBorder(
                 "Your Assignments"));
 
-        JLabel placeholder = new JLabel(
-                "No assignments to display", SwingConstants.CENTER);
+        String[] columns = {
+            "Course", "Assignment Title", "Due Date", "Status"
+        };
 
-        tablePanel.add(placeholder, BorderLayout.CENTER);
+        tableModel = new DefaultTableModel(columns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        assignmentTable = new JTable(tableModel);
+        assignmentTable.setRowHeight(30);
+        assignmentTable.setSelectionMode(
+                ListSelectionModel.SINGLE_SELECTION);
+
+        assignmentTable.getTableHeader().setReorderingAllowed(false);
+        assignmentTable.setFillsViewportHeight(true);
+
+        JScrollPane scrollPane = new JScrollPane(assignmentTable);
+
+        tablePanel.add(scrollPane, BorderLayout.CENTER);
         contentPanel.add(tablePanel, BorderLayout.CENTER);
+
 
         // Bottom buttons
         JPanel buttonPanel = new JPanel(new FlowLayout());
@@ -114,5 +140,20 @@ public class AssignmentTrackerGUI extends JFrame {
             new AssignmentTrackerGUI();
         });
     }
+
+
+    private void refreshTable() {
+        tableModel.setRowCount(0);
+
+        for (Assignment a : assignments) {
+            tableModel.addRow(new Object[]{
+                a.getCourse(),
+                a.getTitle(),
+                a.getDueDate(),
+                a.isCompleted() ? "Completed" : "Incomplete"
+            });
+        }
+    }
+
 }
 
